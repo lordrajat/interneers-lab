@@ -455,3 +455,32 @@ docker compose down                          # Stop MongoDB
 docker compose ps                            # List running containers
 docker compose logs -f                       # View logs
 ```
+
+
+## Product APIs (In-Memory)
+
+This project now includes a simple in-memory Product API (no database writes for product endpoints).
+
+### Endpoints
+- `POST /products/` create a product
+- `GET /products/` list all products
+- `GET /products/<id>/` fetch one product
+- `PUT /products/<id>/` update an existing product (partial updates allowed)
+- `DELETE /products/<id>/` delete a product
+
+### Product fields
+- `name` (required, non-empty string)
+- `description` (optional string)
+- `category` (required, non-empty string)
+- `price` (required, number >= 0)
+- `brand` (required, non-empty string)
+- `quantity` (required, integer >= 0)
+
+### Test via HTTP client
+- Use `backend_http_tests.http` with VSCode REST Client extension
+- Or use Postman/Insomnia with the same endpoints
+
+### Run tests
+```bash
+python manage.py test
+```

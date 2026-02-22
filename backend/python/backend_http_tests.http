@@ -1,0 +1,30 @@
+### Create Product
+POST http://127.0.0.1:8001/products/
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "description": "16GB RAM",
+  "category": "Electronics",
+  "price": 899.99,
+  "brand": "Lenovo",
+  "quantity": 14
+}
+
+### List Products
+GET http://127.0.0.1:8001/products/
+
+### Get Product by ID
+GET http://127.0.0.1:8001/products/1/
+
+### Update Product (Partial)
+PUT http://127.0.0.1:8001/products/1/
+Content-Type: application/json
+
+{
+  "price": 799.50,
+  "quantity": 9
+}
+
+### Delete Product
+DELETE http://127.0.0.1:8001/products/1/
