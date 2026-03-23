@@ -14,5 +14,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("hello/", hello_name),
     path("products/", products_collection),
-    path("products/<int:product_id>/", product_detail),
+    path("products/<str:product_id>/", product_detail),
 ]

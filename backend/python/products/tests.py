@@ -1,16 +1,32 @@
 import json
-from itertools import count
 
-from django.test import Client, TestCase
+import mongomock
+from django.test import Client, SimpleTestCase
+from mongoengine import connect, disconnect
 
-from products import views
+from products.models import Product
 
 
-class ProductApiTests(TestCase):
+class ProductApiTests(SimpleTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        disconnect(alias="default")
+        connect(
+            "products_test_db",
+            alias="default",
+            host="mongodb://localhost",
+            mongo_client_class=mongomock.MongoClient,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        disconnect(alias="default")
+        super().tearDownClass()
+
     def setUp(self):
         self.client = Client()
-        views.PRODUCTS.clear()
-        views.NEXT_ID = count(1)
+        Product.drop_collection()
         self.base_payload = {
             "name": "Laptop",
             "description": "16GB RAM",
@@ -29,8 +45,10 @@ class ProductApiTests(TestCase):
 
         self.assertEqual(response.status_code, 201)
         body = response.json()
-        self.assertEqual(body["id"], 1)
+        self.assertIsInstance(body["id"], str)
         self.assertEqual(body["name"], "Laptop")
+        self.assertIn("created_at", body)
+        self.assertIn("updated_at", body)
 
     def test_create_product_validation(self):
         invalid_payload = {
@@ -48,6 +66,16 @@ class ProductApiTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+    def test_create_product_invalid_json(self):
+        response = self.client.post(
+            "/products/",
+            data='{"name": "Laptop"',
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {"error": "Invalid JSON body."})
 
     def test_list_get_update_delete_product(self):
         create_response = self.client.post(

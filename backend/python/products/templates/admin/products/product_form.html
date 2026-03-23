@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div>
+  <h1>Add product</h1>
+  <p><a href="{{ list_url }}">Back to products</a></p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save product</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,14 +1,25 @@
-from django.core.validators import MinValueValidator
-from django.db import models
+from datetime import datetime, timezone
+from decimal import Decimal
+
+from mongoengine import DateTimeField, DecimalField, Document, IntField, StringField
 
 
-class Product(models.Model):
-    name = models.CharField(max_length=120)
-    description = models.TextField(blank=True, default="")
-    category = models.CharField(max_length=80)
-    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    brand = models.CharField(max_length=80)
-    quantity = models.IntegerField(validators=[MinValueValidator(0)])
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
 
-    def __str__(self) -> str:
-        return f"{self.name} ({self.brand})"
+
+class Product(Document):
+    meta = {"collection": "products"}
+
+    name = StringField(required=True, max_length=120)
+    description = StringField(default="")
+    category = StringField(required=True, max_length=80)
+    price = DecimalField(required=True, min_value=Decimal("0"), precision=2, force_string=True)
+    brand = StringField(required=True, max_length=80)
+    quantity = IntField(required=True, min_value=0)
+    created_at = DateTimeField(default=_utc_now)
+    updated_at = DateTimeField(default=_utc_now)
+
+    def save(self, *args, **kwargs):
+        self.updated_at = _utc_now()
+        return super().save(*args, **kwargs)

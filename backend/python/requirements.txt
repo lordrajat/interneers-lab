@@ -1,2 +1,5 @@
 Django==6.0.2
-pymongo==4.16.0python-dotenv==1.0.0
+pymongo==4.16.0
+mongoengine==0.29.1
+python-dotenv==1.0.0
+mongomock==4.3.0

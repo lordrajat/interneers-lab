@@ -15,10 +15,10 @@ Content-Type: application/json
 GET http://127.0.0.1:8001/products/
 
 ### Get Product by ID
-GET http://127.0.0.1:8001/products/1/
+GET http://127.0.0.1:8001/products/<paste_product_id_here>/
 
 ### Update Product (Partial)
-PUT http://127.0.0.1:8001/products/1/
+PUT http://127.0.0.1:8001/products/<paste_product_id_here>/
 Content-Type: application/json
 
 {
@@ -27,4 +27,4 @@ Content-Type: application/json
 }
 
 ### Delete Product
-DELETE http://127.0.0.1:8001/products/1/
+DELETE http://127.0.0.1:8001/products/<paste_product_id_here>/

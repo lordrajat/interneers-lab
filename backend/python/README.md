@@ -170,7 +170,7 @@ pip3 install -r requirements.txt
 
 By default, **requirements.txt** includes:
 - **Django** 6.0.2
-- **pymongo** 4.16.0 (MongoDB driver)
+- **mongoengine** 0.29.1 (MongoDB ORM)
 
 **Check your `.gitignore`**
 Make sure `venv/` and other temporary files aren't committed.
@@ -394,25 +394,26 @@ mongodb://root:example@localhost:27019/?authSource=admin
 
 To ensure flexibility across environments, use environment variables for the MongoDB connection. For example:
 
-#### Example `settings.py` (Django + pymongo):
+#### Example `settings.py` (Django + mongoengine):
 ```python
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 from dotenv import load_dotenv
 import os
-from pymongo import MongoClient
 
 load_dotenv()
 MONGO_USER = os.getenv("MONGO_USER", "root")
 MONGO_PASS = os.getenv("MONGO_PASS", "example")
 MONGO_PORT = os.getenv("MONGO_PORT", "27019")
 MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
+MONGO_DB = os.getenv("MONGO_DB", "backenddb")
 
-client = MongoClient(
-    f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin"
-)
-
-DATABASES = {}
+MONGODB_SETTINGS = {
+    "db": MONGO_DB,
+    "host": MONGO_HOST,
+    "port": int(MONGO_PORT),
+    "username": MONGO_USER,
+    "password": MONGO_PASS,
+    "authentication_source": "admin",
+}
 ```
 
 ---
@@ -422,7 +423,7 @@ DATABASES = {}
 - Django: https://docs.djangoproject.com/en/6.0/
 - MongoDB: https://docs.mongodb.com/
 - Docker Compose: https://docs.docker.com/compose/
-- pymongo: https://pymongo.readthedocs.io/en/stable/
+- mongoengine: https://docs.mongoengine.org/
 
 ---
 
@@ -457,16 +458,16 @@ docker compose logs -f                       # View logs
 ```
 
 
-## Product APIs (In-Memory)
+## Product APIs (MongoDB)
 
-This project now includes a simple in-memory Product API (no database writes for product endpoints).
+This project includes a Product API backed by MongoDB (via `mongoengine`).
 
 ### Endpoints
 - `POST /products/` create a product
 - `GET /products/` list all products
-- `GET /products/<id>/` fetch one product
+- `GET /products/<id>/` fetch one product by MongoDB ObjectId
 - `PUT /products/<id>/` update an existing product (partial updates allowed)
-- `DELETE /products/<id>/` delete a product
+- `DELETE /products/<id>/` delete a product by MongoDB ObjectId
 
 ### Product fields
 - `name` (required, non-empty string)

@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
 import os
-from pymongo import MongoClient
+
+from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +25,7 @@ MONGO_USER = os.getenv("MONGO_USER", "root")
 MONGO_PASS = os.getenv("MONGO_PASS", "example")
 MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
 MONGO_PORT = os.getenv("MONGO_PORT", "27019")
-
-client = MongoClient(
-    f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin"
-)
-
-mongo_db = client["backenddb"]
+MONGO_DB = os.getenv("MONGO_DB", "backenddb")
 
 
 # Quick-start development settings - unsuitable for production
@@ -54,7 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "products",
+    "products.apps.ProductsConfig",
 ]
 
 MIDDLEWARE = [
@@ -96,6 +91,15 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
+}
+
+MONGODB_SETTINGS = {
+    "db": MONGO_DB,
+    "host": MONGO_HOST,
+    "port": int(MONGO_PORT),
+    "username": MONGO_USER,
+    "password": MONGO_PASS,
+    "authentication_source": "admin",
 }
 
 
