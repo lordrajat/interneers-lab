@@ -1,0 +1,58 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    container_name: interneers_lab_frontend
+    working_dir: /workspace/frontend
+    command: yarn start
+    ports:
+      - "3000:3000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      WDS_SOCKET_PORT: 3000
+      REACT_APP_API_BASE_URL: http://localhost:8001
+    volumes:
+      - .:/workspace
+      - frontend_node_modules:/workspace/frontend/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/python/Dockerfile.dev
+    container_name: interneers_lab_backend
+    command: python manage.py runserver 0.0.0.0:8001
+    working_dir: /workspace/backend/python
+    ports:
+      - "8001:8001"
+    environment:
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+      MONGO_HOST: mongodb
+      MONGO_PORT: "27017"
+      MONGO_USER: root
+      MONGO_PASS: example
+      MONGO_DB: backenddb
+    volumes:
+      - .:/workspace
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:8.0
+    container_name: interneers_lab_mongodb
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  frontend_node_modules:

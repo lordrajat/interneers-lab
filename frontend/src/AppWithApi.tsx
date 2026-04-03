@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./App.scss";
 
-interface Todo {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
+interface HelloResponse {
+  message: string;
 }
 
+const apiBaseUrl =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:8001";
+
 function App() {
-  const [data, setData] = useState<Todo | null>(null);
+  const [data, setData] = useState<HelloResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -17,15 +17,13 @@ function App() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/todos/1",
-        );
+        const response = await fetch(`${apiBaseUrl}/hello/?name=Docker`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const json: Todo = await response.json();
+        const json: HelloResponse = await response.json();
         setData(json);
       } catch (err: any) {
         setError(err);
@@ -49,10 +47,9 @@ function App() {
     return (
       <div className="App">
         <header className="App-header">
-          <h1>API Data</h1>
-          <p>User ID: {data.userId}</p>
-          <p>Title: {data.title}</p>
-          <p>Completed: {data.completed ? "Yes" : "No"}</p>
+          <h1>Backend Connection</h1>
+          <p>{data.message}</p>
+          <p>API Base URL: {apiBaseUrl}</p>
         </header>
       </div>
     );

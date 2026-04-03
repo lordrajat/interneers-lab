@@ -1,9 +1,29 @@
 services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: backend/python/Dockerfile.dev
+    container_name: interneers_lab_2026_backend_python
+    command: python manage.py runserver 0.0.0.0:8001
+    working_dir: /workspace/backend/python
+    ports:
+      - "8001:8001"
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_PORT: "27017"
+      MONGO_USER: root
+      MONGO_PASS: example
+      MONGO_DB: backenddb
+    volumes:
+      - ../..:/workspace
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:8.0
     container_name: interneers_lab_2026_mongodb
     ports:
-      - '27019:27017'
+      - "27019:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example

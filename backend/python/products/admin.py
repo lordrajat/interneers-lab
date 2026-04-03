@@ -3,14 +3,17 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
+from django.views.decorators.http import require_http_methods
 from types import MethodType
 
+from products.errors import ProductError
 from products.forms import ProductAdminForm
-from products.services import ProductError, ProductService
+from products.services import ProductService
 
 product_service = ProductService()
 
 
+@require_http_methods(["GET"])
 def products_admin_list(request: HttpRequest) -> HttpResponse:
     context = {
         **admin.site.each_context(request),
@@ -21,6 +24,7 @@ def products_admin_list(request: HttpRequest) -> HttpResponse:
     return TemplateResponse(request, "admin/products/product_list.html", context)
 
 
+@require_http_methods(["GET", "POST"])
 def products_admin_add(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = ProductAdminForm(request.POST)
@@ -39,6 +43,7 @@ def products_admin_add(request: HttpRequest) -> HttpResponse:
         **admin.site.each_context(request),
         "title": "Add product",
         "form": form,
+        "has_categories": bool(form.fields["category_id"].choices),
         "list_url": reverse("admin:products_list"),
     }
     return TemplateResponse(request, "admin/products/product_form.html", context)

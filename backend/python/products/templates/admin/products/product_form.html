@@ -5,6 +5,10 @@
   <h1>Add product</h1>
   <p><a href="{{ list_url }}">Back to products</a></p>
 
+  {% if not has_categories %}
+  <p>Create a category first before adding products.</p>
+  {% endif %}
+
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

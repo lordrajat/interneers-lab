@@ -3,7 +3,8 @@ from typing import Any
 from bson import ObjectId
 from mongoengine.errors import ValidationError
 
-from products.models import Product
+from products.category_repository import serialize_category
+from products.models import Product, ProductCategory
 
 
 def serialize_product(product: Product) -> dict[str, Any]:
@@ -11,7 +12,7 @@ def serialize_product(product: Product) -> dict[str, Any]:
         "id": str(product.id),
         "name": product.name,
         "description": product.description,
-        "category": product.category,
+        "category": serialize_category(product.category),
         "price": float(product.price),
         "brand": product.brand,
         "quantity": product.quantity,
@@ -29,10 +30,17 @@ class ProductRepository:
     def list_all(self) -> list[Product]:
         return list(Product.objects.order_by("-created_at"))
 
+    def list_by_category(self, category: ProductCategory) -> list[Product]:
+        return list(Product.objects(category=category).order_by("-created_at"))
+
     def get_by_id(self, product_id: str) -> Product | None:
         if not ObjectId.is_valid(product_id):
             return None
         return Product.objects(id=product_id).first()
+
+    def save(self, product: Product) -> Product:
+        product.save()
+        return product
 
     def update(self, product_id: str, updates: dict[str, Any]) -> Product | None:
         product = self.get_by_id(product_id)
@@ -56,3 +64,9 @@ class ProductRepository:
 
         product.delete()
         return True
+
+    def exists_for_category(self, category: ProductCategory) -> bool:
+        return Product.objects(category=category).first() is not None
+
+    def list_missing_brand(self) -> list[Product]:
+        return list(Product.objects.filter(__raw__={"$or": [{"brand": {"$exists": False}}, {"brand": None}, {"brand": ""}]}))
