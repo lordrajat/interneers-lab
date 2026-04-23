@@ -3,7 +3,7 @@ from typing import Any
 from bson import ObjectId
 from mongoengine.errors import ValidationError
 
-from products.models import ProductCategory
+from products.domain.models import ProductCategory
 
 
 def serialize_category(category: ProductCategory) -> dict[str, Any]:

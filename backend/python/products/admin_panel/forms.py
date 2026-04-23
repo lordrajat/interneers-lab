@@ -1,6 +1,6 @@
 from django import forms
 
-from products.category_repository import CategoryRepository
+from products.repositories import CategoryRepository
 
 class ProductAdminForm(forms.Form):
     name = forms.CharField(max_length=120)

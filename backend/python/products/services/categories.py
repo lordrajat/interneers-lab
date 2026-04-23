@@ -1,8 +1,7 @@
 from typing import Any
 
-from products.category_repository import CategoryRepository, serialize_category
-from products.errors import ProductError
-from products.repository import ProductRepository, serialize_product
+from products.domain.errors import ProductError
+from products.repositories import CategoryRepository, ProductRepository, serialize_category, serialize_product
 
 
 class CategoryService:

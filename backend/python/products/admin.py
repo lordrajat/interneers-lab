@@ -6,8 +6,8 @@ from django.urls import path, reverse
 from django.views.decorators.http import require_http_methods
 from types import MethodType
 
-from products.errors import ProductError
-from products.forms import ProductAdminForm
+from products.admin_panel import ProductAdminForm
+from products.domain.errors import ProductError
 from products.services import ProductService
 
 product_service = ProductService()

@@ -1,0 +1,42 @@
+from datetime import datetime, timezone
+from decimal import Decimal
+
+from mongoengine import DENY, DateTimeField, DecimalField, Document, IntField, ReferenceField, StringField
+
+
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+class ProductCategory(Document):
+    meta = {"collection": "product_categories"}
+
+    title = StringField(required=True, unique=True, max_length=80)
+    description = StringField(default="")
+    created_at = DateTimeField(default=_utc_now)
+    updated_at = DateTimeField(default=_utc_now)
+
+    def save(self, *args, **kwargs):
+        self.updated_at = _utc_now()
+        return super().save(*args, **kwargs)
+
+
+class Product(Document):
+    name = StringField(required=True, max_length=120)
+    description = StringField(default="")
+    category = ReferenceField(
+        ProductCategory, required=True, reverse_delete_rule=DENY
+    )
+    price = DecimalField(
+        required=True, min_value=Decimal("0"), precision=2, force_string=True
+    )
+    brand = StringField(required=True, max_length=80)
+    quantity = IntField(required=True, min_value=0)
+    created_at = DateTimeField(default=_utc_now)
+    updated_at = DateTimeField(default=_utc_now)
+
+    meta = {"collection": "products"}
+
+    def save(self, *args, **kwargs):
+        self.updated_at = _utc_now()
+        return super().save(*args, **kwargs)

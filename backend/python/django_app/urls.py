@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import path
 
-from products.category_views import categories_collection, category_detail
-from products.views import (
+from products.api import (
     bulk_products_collection,
+    categories_collection,
+    category_detail,
     category_product_assignment,
     category_product_removal,
     normalize_product_brands,

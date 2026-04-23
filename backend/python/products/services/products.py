@@ -3,10 +3,9 @@ from typing import Any
 
 from bson import ObjectId
 
-from products.bulk_import_service import BulkProductImportService
-from products.category_repository import CategoryRepository
-from products.errors import ProductError
-from products.repository import ProductRepository, serialize_product
+from products.domain.errors import ProductError
+from products.repositories import CategoryRepository, ProductRepository, serialize_product
+from products.services.bulk_import import BulkProductImportService
 
 
 class ProductService:

@@ -1,6 +1,7 @@
 import json
 
 import mongomock
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, SimpleTestCase
 from mongoengine import connect, disconnect
 
@@ -249,6 +250,29 @@ class ProductApiTests(SimpleTestCase):
         body = response.json()
         self.assertEqual(body["created_count"], 2)
         self.assertEqual(len(body["products"]), 2)
+
+    def test_bulk_csv_page_renders_for_browser(self):
+        response = self.client.get("/products/bulk/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Bulk Product Import")
+        self.assertContains(response, "Upload CSV")
+
+    def test_bulk_csv_import_accepts_uploaded_file(self):
+        csv_body = (
+            "name,description,category_id,price,brand,quantity\n"
+            f"Mouse,Wireless,{self.category.id},24.99,Logi,8\n"
+        )
+        csv_file = SimpleUploadedFile(
+            "products.csv",
+            csv_body.encode("utf-8"),
+            content_type="text/csv",
+        )
+
+        response = self.client.post("/products/bulk/", data={"file": csv_file})
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()["created_count"], 1)
 
     def test_bulk_csv_import_reports_row_errors(self):
         csv_body = (

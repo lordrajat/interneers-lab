@@ -2,8 +2,8 @@ import csv
 import io
 from typing import Any
 
-from products.errors import ProductError
-from products.repository import serialize_product
+from products.domain.errors import ProductError
+from products.repositories import serialize_product
 
 
 class BulkProductImportService:

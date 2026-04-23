@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <style>
+        :root {
+            --bg: #f4f6f8;
+            --panel: #ffffff;
+            --text: #17212b;
+            --muted: #5b6875;
+            --accent: #0b5cab;
+            --accent-dark: #08447f;
+            --border: #d7dde3;
+            --success-bg: #eaf7ef;
+            --success-text: #17633a;
+            --error-bg: #fdeeee;
+            --error-text: #9a1f1f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(135deg, #eef3f8 0%, #f9fafb 100%);
+            color: var(--text);
+        }
+
+        .shell {
+            max-width: 860px;
+            margin: 48px auto;
+            padding: 0 24px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 18px 50px rgba(19, 33, 49, 0.08);
+            overflow: hidden;
+        }
+
+        .hero {
+            padding: 40px 40px 24px;
+            background: linear-gradient(135deg, #0b5cab 0%, #1e3d63 100%);
+            color: #ffffff;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 640px;
+            color: rgba(255, 255, 255, 0.86);
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 32px 40px 40px;
+        }
+
+        .section-title {
+            margin: 0 0 12px;
+            font-size: 1.1rem;
+        }
+
+        .hint {
+            margin: 0 0 18px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            background: #fcfdfe;
+        }
+
+        code, pre {
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        pre {
+            margin: 12px 0 0;
+            padding: 14px;
+            border-radius: 10px;
+            overflow-x: auto;
+            background: #13202b;
+            color: #eef4fb;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.96rem;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        button {
+            width: fit-content;
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 22px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.96rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--accent-dark);
+        }
+
+        .result {
+            display: none;
+            margin-top: 24px;
+            padding: 18px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .result.success {
+            display: block;
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .result.error {
+            display: block;
+            background: var(--error-bg);
+            color: var(--error-text);
+        }
+
+        @media (max-width: 760px) {
+            .shell {
+                margin: 20px auto;
+            }
+
+            .hero,
+            .content {
+                padding: 24px;
+            }
+
+            .columns {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <section class="panel">
+            <header class="hero">
+                <h1>{{ title }}</h1>
+                <p>Upload a CSV file to create products in one request. This page uses the same <code>/products/bulk/</code> endpoint, but gives you a browser-friendly interface instead of a method error.</p>
+            </header>
+
+            <div class="content">
+                <div class="columns">
+                    <section class="card">
+                        <h2 class="section-title">CSV Format</h2>
+                        <p class="hint">Use this exact header row. Each product must reference an existing category id.</p>
+                        <pre>name,description,category_id,price,brand,quantity
+Mouse,Wireless mouse,66123456789abcdef012345,24.99,Logi,8</pre>
+                    </section>
+
+                    <section class="card">
+                        <h2 class="section-title">Requirements</h2>
+                        <ul>
+                            <li>The file must be UTF-8 encoded.</li>
+                            <li>The header row is required.</li>
+                            <li><code>quantity</code> must be an integer.</li>
+                            <li><code>price</code> must be a valid number.</li>
+                            <li><code>category_id</code> must already exist.</li>
+                        </ul>
+                    </section>
+                </div>
+
+                <section class="card">
+                    <h2 class="section-title">Upload CSV</h2>
+                    <form id="bulk-upload-form" enctype="multipart/form-data">
+                        <div>
+                            <label for="csv-file">Choose CSV file</label>
+                        </div>
+                        <input id="csv-file" name="file" type="file" accept=".csv,text/csv" required>
+                        <button type="submit">Import Products</button>
+                    </form>
+                    <div id="result" class="result"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById("bulk-upload-form");
+        const result = document.getElementById("result");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            result.className = "result";
+            result.textContent = "Uploading...";
+            result.style.display = "block";
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(window.location.pathname, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                result.classList.add(response.ok ? "success" : "error");
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.classList.add("error");
+                result.textContent = "Upload failed. Please try again.";
+            }
+        });
+    </script>
+</body>
+</html>
