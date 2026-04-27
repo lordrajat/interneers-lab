@@ -1,0 +1,181 @@
+:root {
+  --bg-a: #f8fbff;
+  --bg-b: #e8f7f0;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #4b5563;
+  --line: #d1d5db;
+  --accent-a: #0f766e;
+  --accent-b: #14b8a6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: linear-gradient(120deg, var(--bg-a), var(--bg-b));
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  animation: slideDown 0.55s ease;
+}
+
+.hero h1 {
+  margin: 0;
+}
+
+.hero p {
+  margin-top: 0.4rem;
+  color: var(--muted);
+}
+
+.container {
+  width: min(1080px, 92%);
+  margin: 0 auto 2rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+  animation: fadeUp 0.65s ease both;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.product-tile {
+  border: 1px solid #cfe9df;
+  background: linear-gradient(180deg, #ffffff, #f6fffb);
+  border-radius: 14px;
+  padding: 1rem;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.product-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 22px rgba(15, 118, 110, 0.16);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #14532d;
+  font-size: 0.8rem;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  color: var(--muted);
+}
+
+.stock {
+  margin-top: 0.5rem;
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.55rem 0.95rem;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  transition: transform 140ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+#statusText {
+  color: var(--muted);
+}
+
+.product-list {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.product-card {
+  border: 1px solid #d8e7e3;
+  border-radius: 12px;
+  background: #fbfffe;
+  padding: 0.8rem;
+  animation: popIn 280ms ease both;
+}
+
+.product-card h4 {
+  margin: 0 0 0.3rem;
+}
+
+.product-card p {
+  margin: 0.3rem 0;
+  color: var(--muted);
+}
+
+.empty-state {
+  border: 1px dashed #bad8d0;
+  border-radius: 10px;
+  padding: 0.9rem;
+  color: var(--muted);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
