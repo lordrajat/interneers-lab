@@ -31,7 +31,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0,backend
       MONGO_HOST: mongodb
       MONGO_PORT: "27017"
       MONGO_USER: root

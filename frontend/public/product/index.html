@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Lab</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Interneers Product Lab</h1>
+      <nav>
+        <a href="#featured">Featured</a>
+        <a href="#products">Products</a>
+      </nav>
+    </header>
+
+    <header class="hero">
+      <h1>Product Display Lab</h1>
+      <p>ProductList + Product components behavior in plain HTML/CSS/JS</p>
+    </header>
+
+    <main class="container">
+      <section class="panel" id="featured">
+        <h2>Featured Product Tile</h2>
+        <article class="product-tile" id="productTile">
+          <span class="chip" id="productCategory">Category</span>
+          <h3 id="productName">Waiting for API data...</h3>
+          <p id="productDescription">Product description will show here.</p>
+          <div class="meta-row">
+            <strong id="productPrice">$0.00</strong>
+            <span id="productBrand">Brand</span>
+          </div>
+          <p class="stock" id="productQuantity">Qty: 0</p>
+        </article>
+
+        <div class="actions">
+          <button id="refreshBtn" type="button">Refresh Products</button>
+          <span id="statusText">Ready.</span>
+        </div>
+      </section>
+
+      <section class="panel" id="products">
+        <h2>Full Product List</h2>
+        <p class="helper-text">
+          Click a product card to expand details. Uses API data when available, else dummy data.
+        </p>
+        <div class="product-list" id="productList"></div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
