@@ -7,13 +7,21 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <header class="topbar">
+      <h1>Interneers Product Lab</h1>
+      <nav>
+        <a href="#featured">Featured</a>
+        <a href="#products">Products</a>
+      </nav>
+    </header>
+
     <header class="hero">
       <h1>Product Display Lab</h1>
-      <p>Plain HTML + CSS + JavaScript API exploration page</p>
+      <p>ProductList + Product components behavior in plain HTML/CSS/JS</p>
     </header>
 
     <main class="container">
-      <section class="panel">
+      <section class="panel" id="featured">
         <h2>Featured Product Tile</h2>
         <article class="product-tile" id="productTile">
           <span class="chip" id="productCategory">Category</span>
@@ -32,8 +40,11 @@
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="products">
         <h2>Full Product List</h2>
+        <p class="helper-text">
+          Click a product card to expand details. Uses API data when available, else dummy data.
+        </p>
         <div class="product-list" id="productList"></div>
       </section>
     </main>

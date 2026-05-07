@@ -5,8 +5,7 @@ interface HelloResponse {
   message: string;
 }
 
-const apiBaseUrl =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8001";
+const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "";
 
 function App() {
   const [data, setData] = useState<HelloResponse | null>(null);
@@ -49,7 +48,7 @@ function App() {
         <header className="App-header">
           <h1>Backend Connection</h1>
           <p>{data.message}</p>
-          <p>API Base URL: {apiBaseUrl}</p>
+          <p>API Base URL: {apiBaseUrl || "(CRA proxy -> localhost:8001)"}</p>
         </header>
       </div>
     );
